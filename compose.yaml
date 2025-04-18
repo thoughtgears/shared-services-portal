@@ -1,3 +1,30 @@
 services:
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    command: ["npm", "run", "dev"]
+    environment:
+      VITE_API_GATEWAY_ENDPOINT: http://localhost:8080
+      CHOKIDAR_USEPOLLING: "true"
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules # Prevent conflicts with host's node_modules
+    depends_on:
+      - portal-api
+
   portal-api:
-    image: ${GCP_REGION}${GCP_PROJECT_ID}/portal-api:latest
+    image: ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/apis/portal-api:latest
+    environment:
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      GCP_REGION: ${GCP_REGION}
+      GCP_BUCKET_NAME: ${GCP_PROJECT_ID}-documents
+      LOCAL: false
+      GOOGLE_APPLICATION_CREDENTIALS: /root/.config/gcloud/application_default_credentials.json
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud
+    ports:
+      - "8080:8080"
