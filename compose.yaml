@@ -1,0 +1,3 @@
+services:
+  portal-api:
+    image: ${GCP_REGION}${GCP_PROJECT_ID}/portal-api:latest
