@@ -77,7 +77,7 @@ const Dashboard: React.FC = () => {
       try {
         // Get the Firebase ID token for authentication
         const idToken = await user.getIdToken();
-        
+
         // Fetch user data from your API using the Firebase ID
         const response = await fetch(`${API_ENDPOINT}/v1/users/${user.uid}`, {
           headers: {
@@ -231,7 +231,7 @@ const Dashboard: React.FC = () => {
       formData.append('file', selectedFile);
       formData.append('user_id', userData.id);
       formData.append('document_type', documentType);
-      
+
       const response = await fetch(`${API_ENDPOINT}/v1/documents`, {
         method: 'POST',
         headers: {
